@@ -1,0 +1,73 @@
+# Debug inputs
+#        flogo_project_name: "MLE_Send-EMS-Msg"
+# flogo_project_description: ""
+#                   repoUrl: "github.com?owner=TIBCO-Hub-Backstage&repo=import-flow-demo-3-flogo-ems"
+# flogo_ems_queue_receivers: []
+#   flogo_ems_queue_senders: ["MLE_Demo"]
+#            flogo_task_ids: ["StartActivity","EMSSendMessage","ConfigureHTTPResponse","ReplyToTrigger"]
+#               flogo_tasks: [{"id":"StartActivity","name":"StartActivity","description":"NoOp Activity","activity":{"ref":"#noop"}},{"id":"EMSSendMessage","name":"EMSSendMessage","description":"","activity":{"ref":"#sendmessage","settings":{"connection":"conn://43a40201-5d92-40a1-a884-157031567b36","destinationType":"Queue","settingDestination":"MLE_Demo","deliveryDelay":0},"input":{"message":"=$flow.body.inputMessage","destination":""},"schemas":{"input":{"headers":{"type":"json","value":"{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"correlationID\":{\"type\":\"string\"},\"replyTo\":{\"type\":\"string\"},\"deliveryMode\":{\"type\":\"string\"},\"expiration\":{\"type\":\"integer\"},\"priority\":{\"type\":\"integer\"}}}","fe_metadata":"{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"correlationID\":{\"type\":\"string\"},\"replyTo\":{\"type\":\"string\"},\"deliveryMode\":{\"type\":\"string\"},\"expiration\":{\"type\":\"integer\"},\"priority\":{\"type\":\"integer\"}}}","feSchemaMap":{}}}}}},{"id":"ConfigureHTTPResponse","name":"ConfigureHTTPResponse","description":"Configure HTTP Response Activity","activity":{"ref":"#httpresponse","input":{"trigger":"ReceiveHTTPMessage","responsecode":"200","input":{"mapping":{"body":{"response":"=$activity[EMSSendMessage].messageId"}}}},"schemas":{"input":{"input":{"type":"json","value":"{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"response\":{\"type\":\"string\"}}}}}","fe_metadata":"{\"body\":{\"response\":\"string\"}}","feSchemaMap":{}}},"output":{"response":{"type":"json","value":"{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"object\",\"properties\":{\"response\":{\"type\":\"string\"}}}}}","fe_metadata":"{\"body\":{\"response\":\"string\"}}","feSchemaMap":{}}}}}},{"id":"ReplyToTrigger","name":"ReplyToTrigger","description":"Reply back to the trigger and continue flow execution, it must be used only in the flow with the trigger configured.","activity":{"ref":"#actreply","input":{"reply":{"mapping":{"code":"=$activity[ConfigureHTTPResponse].code","responseBody":"=$activity[ConfigureHTTPResponse].response"}}},"schemas":{"input":{"reply":{"type":"json","value":"{\"type\":\"object\",\"title\":\"Inputs\",\"properties\":{\"code\":{\"type\":\"integer\",\"required\":false},\"responseBody\":{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}},\"required\":[]}","fe_metadata":"{\"type\":\"object\",\"title\":\"Inputs\",\"properties\":{\"code\":{\"type\":\"integer\",\"required\":false},\"responseBody\":{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}},\"required\":[]}","feSchemaMap":{}}}}}}]
+#                     owner: "group:default/tibco-imported"
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: MLE_Send-EMS-Msg_StartActivity_FLOGO_TASK
+  description: NoOp Activity
+  tags:
+    - flogo-task
+spec:
+  type: flogo-task
+  lifecycle: production
+  owner: group:default/tibco-imported
+  dependsOn: ['component:default/MLE_Send-EMS-Msg_FLOGO_APP']
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: MLE_Send-EMS-Msg_EMSSendMessage_FLOGO_TASK
+  tags:
+    - flogo-task
+spec:
+  type: flogo-task
+  lifecycle: production
+  owner: group:default/tibco-imported
+  dependsOn: ['component:default/MLE_Send-EMS-Msg_FLOGO_APP']
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: MLE_Send-EMS-Msg_ConfigureHTTPResponse_FLOGO_TASK
+  description: Configure HTTP Response Activity
+  tags:
+    - flogo-task
+spec:
+  type: flogo-task
+  lifecycle: production
+  owner: group:default/tibco-imported
+  dependsOn: ['component:default/MLE_Send-EMS-Msg_FLOGO_APP']
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: MLE_Send-EMS-Msg_ReplyToTrigger_FLOGO_TASK
+  description: Reply back to the trigger and continue flow execution, it must be used only in the flow with the trigger configured.
+  tags:
+    - flogo-task
+spec:
+  type: flogo-task
+  lifecycle: production
+  owner: group:default/tibco-imported
+  dependsOn: ['component:default/MLE_Send-EMS-Msg_FLOGO_APP']
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: MLE_Demo_EMS_QUEUE
+  description: EMS Queue:MLE_Demo
+  tags:
+    - ems-queue
+spec:
+  type: ems-queue
+  lifecycle: production
+  owner: group:default/tibco-imported
+  dependsOn: ['component:default/MLE_Send-EMS-Msg_FLOGO_APP']

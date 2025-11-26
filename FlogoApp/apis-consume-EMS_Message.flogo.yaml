@@ -1,0 +1,12 @@
+ # Debug inputs
+ #        flogo_project_name: "MLE_Consume-EMS_Message"
+ # flogo_project_description: ""
+ #                   repoUrl: "github.com?owner=TIBCO-Hub-Backstage&repo=import-flow-demo-3-flogo-ems"
+ # flogo_ems_queue_receivers: ["MLE_Demo"]
+ #   flogo_ems_queue_senders: []
+ #            flogo_task_ids: ["StartActivity","LogMessage"]
+ #               flogo_tasks: [{"id":"StartActivity","name":"StartActivity","description":"NoOp Activity","activity":{"ref":"#noop"}},{"id":"LogMessage","name":"LogMessage","description":"Simple Log Message Activity","activity":{"ref":"#log","input":{"Log Level":"INFO","flowInfo":false,"message":"=$flow.message","logLevel":"INFO"}}}]
+ #                     owner: "group:default/tibco-imported"
+ #           flogo_api_names: []
+ #     flogo_api_swagger_b64: []
+ #flogo_api_swagger_triggers: []

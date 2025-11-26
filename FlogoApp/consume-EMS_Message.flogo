@@ -1,0 +1,191 @@
+{
+  "imports": [
+    "github.com/project-flogo/flow",
+    "github.com/project-flogo/contrib/activity/noop",
+    "github.com/tibco/flogo-general/src/app/General/activity/log",
+    "github.com/tibco/flogo-ems/src/app/EMS/trigger/receivemessage",
+    "github.com/tibco/flogo-ems/src/app/EMS/connector/ems"
+  ],
+  "name": "MLE_Consume-EMS_Message",
+  "description": "",
+  "version": "1.0.0",
+  "type": "flogo:app",
+  "appModel": "1.1.1",
+  "tags": [],
+  "triggers": [
+    {
+      "ref": "#receivemessage",
+      "name": "receivemessage",
+      "description": "This trigger receives messages from the EMS",
+      "settings": {
+        "connection": "conn://f0d210f2-0a27-41e5-a124-be2686522cf0"
+      },
+      "id": "ReceiveEMSMessage",
+      "handlers": [
+        {
+          "description": "",
+          "settings": {
+            "destinationType": "Queue",
+            "destination": "MLE_Demo",
+            "ackMode": "Auto"
+          },
+          "action": {
+            "ref": "github.com/project-flogo/flow",
+            "settings": {
+              "flowURI": "res://flow:Consume_EMS"
+            },
+            "input": {
+              "message": "=$.message",
+              "messageId": "=$.headers.messageID"
+            }
+          },
+          "schemas": {
+            "output": {
+              "headers": {
+                "type": "json",
+                "value": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"destination\":{\"type\":\"string\"},\"replyTo\":{\"type\":\"string\"},\"deliveryMode\":{\"type\":\"string\"},\"messageID\":{\"type\":\"string\"},\"timestamp\":{\"type\":\"integer\"},\"expiration\":{\"type\":\"integer\"},\"reDelivered\":{\"type\":\"boolean\"},\"priority\":{\"type\":\"integer\"},\"correlationID\":{\"type\":\"string\"}}}",
+                "fe_metadata": "{\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"type\":\"object\",\"properties\":{\"destination\":{\"type\":\"string\"},\"replyTo\":{\"type\":\"string\"},\"deliveryMode\":{\"type\":\"string\"},\"messageID\":{\"type\":\"string\"},\"timestamp\":{\"type\":\"integer\"},\"expiration\":{\"type\":\"integer\"},\"reDelivered\":{\"type\":\"boolean\"},\"priority\":{\"type\":\"integer\"},\"correlationID\":{\"type\":\"string\"}}}",
+                "feSchemaMap": {}
+              }
+            }
+          },
+          "name": "Consume_EMS"
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:Consume_EMS",
+      "data": {
+        "name": "Consume_EMS",
+        "description": "",
+        "links": [
+          {
+            "id": 1,
+            "from": "StartActivity",
+            "to": "LogMessage",
+            "type": "label",
+            "label": "StartActivity to LogMessage"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "StartActivity",
+            "name": "StartActivity",
+            "description": "NoOp Activity",
+            "activity": {
+              "ref": "#noop"
+            }
+          },
+          {
+            "id": "LogMessage",
+            "name": "LogMessage",
+            "description": "Simple Log Message Activity",
+            "activity": {
+              "ref": "#log",
+              "input": {
+                "Log Level": "INFO",
+                "flowInfo": false,
+                "message": "=$flow.message",
+                "logLevel": "INFO"
+              }
+            }
+          }
+        ],
+        "fe_metadata": "eyJTdGFydEFjdGl2aXR5Ijp7IngiOjEwMCwieSI6MTAwfSwiTG9nTWVzc2FnZSI6eyJ4IjozMDMsInkiOjg4fX0=",
+        "metadata": {
+          "input": [
+            {
+              "name": "message",
+              "type": "string"
+            },
+            {
+              "name": "messageId",
+              "type": "string"
+            }
+          ],
+          "output": [
+            {
+              "name": "code",
+              "type": "integer"
+            },
+            {
+              "name": "responseBody",
+              "type": "object",
+              "schema": {
+                "type": "json",
+                "value": "{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}"
+              }
+            }
+          ],
+          "fe_metadata": {
+            "input": "{\"type\":\"object\",\"title\":\"ReceiveHTTPMessage\",\"properties\":{\"message\":{\"type\":\"string\",\"required\":false},\"messageId\":{\"type\":\"string\",\"required\":false}}}",
+            "output": "{\"type\":\"object\",\"title\":\"Inputs\",\"properties\":{\"code\":{\"type\":\"integer\",\"required\":false},\"responseBody\":{\"type\":\"object\",\"properties\":{\"body\":{\"type\":\"any\"},\"headers\":{\"type\":\"object\"}}}},\"required\":[]}"
+          }
+        }
+      }
+    }
+  ],
+  "properties": [
+    {
+      "name": "EMS.DP4_EMS.ServerUrl",
+      "type": "string",
+      "value": "tcp://emsdemo-emsactive.nlpresales-ns.svc:9011,tcp://emsdemo-ems.nlpresales-ns.svc:9011"
+    },
+    {
+      "name": "EMS.DP4_EMS.User_Name",
+      "type": "string",
+      "value": "michel.leijdekker@cloud.com"
+    },
+    {
+      "name": "EMS.DP4_EMS.Password",
+      "type": "string",
+      "value": "SECRET:cIPrYYdbVqW0k/jldadP+brRqegaiFJWVSukUw=="
+    },
+    {
+      "name": "EMS.DP4_EMS.Reconnect_Count",
+      "type": "float64",
+      "value": 4
+    },
+    {
+      "name": "EMS.DP4_EMS.Reconnect_Delay",
+      "type": "float64",
+      "value": 500
+    },
+    {
+      "name": "EMS.DP4_EMS.Retry_Timeout",
+      "type": "float64",
+      "value": 0
+    }
+  ],
+  "connections": {
+    "f0d210f2-0a27-41e5-a124-be2686522cf0": {
+      "id": "f0d210f2-0a27-41e5-a124-be2686522cf0",
+      "name": "DP4_EMS",
+      "ref": "#ems",
+      "isGlobal": false,
+      "settings": {
+        "name": "DP4_EMS",
+        "description": "Ems client configuration",
+        "serverUrl": "=$property[\"EMS.DP4_EMS.ServerUrl\"]",
+        "authenticationMode": "None",
+        "userName": "=$property[\"EMS.DP4_EMS.User_Name\"]",
+        "password": "=$property[\"EMS.DP4_EMS.Password\"]",
+        "clientCert": "",
+        "clientKey": "",
+        "caCert": "",
+        "privateKeyPassword": "",
+        "noVerifyHostname": true,
+        "reconnectCount": "=$property[\"EMS.DP4_EMS.Reconnect_Count\"]",
+        "reconnectDelay": "=$property[\"EMS.DP4_EMS.Reconnect_Delay\"]",
+        "reconnectTimeout": "=$property[\"EMS.DP4_EMS.Retry_Timeout\"]"
+      }
+    }
+  },
+  "contrib": "W3sicmVmIjoiZ2l0aHViLmNvbS90aWJjby9mbG9nby1lbXMvc3JjL2FwcC9FTVMiLCJpZCI6IkVNUyIsInZlcnNpb24iOiIxLjAuMCIsInRhZyI6IjEuMC4wLWIxMyIsIm5hbWUiOiJUSUJDTyBFbnRlcnByaXNlIE1lc3NhZ2UgU2VydmljZSIsInMzbG9jYXRpb24iOiJUaWJjby9FTVMiLCJpc1VzZXJFeHRlbnNpb24iOmZhbHNlfSx7InJlZiI6ImdpdGh1Yi5jb20vdGliY28vZmxvZ28tZ2VuZXJhbC9zcmMvYXBwL0dlbmVyYWwiLCJpZCI6IkdlbmVyYWwiLCJ2ZXJzaW9uIjoiMS42LjIiLCJ0YWciOiIxLjYuMi1iMDIiLCJuYW1lIjoiR2VuZXJhbCIsInMzbG9jYXRpb24iOiJUaWJjby9HZW5lcmFsIiwiaXNVc2VyRXh0ZW5zaW9uIjpmYWxzZX1d",
+  "metadata": {
+    "endpoints": [],
+    "flogoVersion": "2.25.1"
+  }
+}
