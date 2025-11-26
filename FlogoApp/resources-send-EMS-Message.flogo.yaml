@@ -1,7 +1,7 @@
 # Debug inputs
 #        flogo_project_name: "MLE_Send-EMS-Msg"
 # flogo_project_description: ""
-#                   repoUrl: "github.com?owner=TIBCO-Hub-Backstage&repo=import-flow-demo-3-flogo-ems"
+#                   repoUrl: "github.com?owner=vinandreann&repo=ImportFlogoAppRepo"
 # flogo_ems_queue_receivers: []
 #   flogo_ems_queue_senders: ["MLE_Demo"]
 #            flogo_task_ids: ["StartActivity","EMSSendMessage","ConfigureHTTPResponse","ReplyToTrigger"]
